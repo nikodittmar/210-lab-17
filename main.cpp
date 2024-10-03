@@ -15,11 +15,11 @@ Node* deleteNode(Node *, int);
 
 Node* insertNode(Node *, int, int);
 
-void addFront(Node *);
+Node* insertFront(Node *, int);
 
-void addTail(Node *);
+Node* insertBack(Node *, int);
 
-void deleteList(Node *);
+Node* deleteList(Node *);
 
 int main() {
     Node *head = nullptr;
@@ -58,12 +58,28 @@ int main() {
     output(head);
     cout << "Choice --> ";
     cin >> entry;
-    head = insertNode(head, entry - 1, 10000);
+    head = insertNode(head, entry, 10000);
     output(head);
 
+    // insert a node in the front
+    cout << "What value to insert at the front?" << endl;
+    output(head);
+    cout << "Value --> ";
+    cin >> entry;
+    head = insertFront(head, entry);
+    output(head);
+
+    // insert a node in the back
+    cout << "What value to insert at the back?" << endl;
+    output(head);
+    cout << "Value --> ";
+    cin >> entry;
+    head = insertBack(head, entry);
+    output(head);
+
+
     // deleting the linked list
-    deleteList(head);
-    head = nullptr;
+    head = deleteList(head);
     output(head);
 
     return 0;
@@ -83,6 +99,9 @@ void output(Node * hd) {
     cout << endl;
 }
 
+// deleteNode() deletes a node from a linked list.
+// arguments: head: the head of the linked list, index: the index of the node to delete.
+// returns: pointer to the head of the linked list.
 Node* deleteNode(Node *head, int index) {
     if (index == 0) {
         Node *newhead = head->next;
@@ -112,14 +131,18 @@ Node* deleteNode(Node *head, int index) {
     return head;
 }
 
+// insertNode() inserts a node at the specified index of a linked list.
+// arguments: head: the head of the linked list, index: the index to insert the new node at, value: the value of the new node.
+// returns: pointer to the head of the linked list.
 Node* insertNode(Node *head, int index, int value) {
     Node *current = head;
     Node *prev = nullptr;
 
     for (int i = 0; i < index; i++) {
-        if (i == 0)
+        if (i == 0) {
             current = current->next;
-        else {
+            prev = head;
+        } else {
             current = current->next;
             prev = prev->next;
         }
@@ -127,7 +150,9 @@ Node* insertNode(Node *head, int index, int value) {
     //at this point, insert a node between prev and current
     Node * newnode = new Node;
     newnode->value = value;
-    newnode->next = current;
+    if (current) {
+        newnode->next = current;
+    }
     if (prev) {
         prev->next = newnode;
         return head;
@@ -136,15 +161,39 @@ Node* insertNode(Node *head, int index, int value) {
     }    
 }
 
-void insertFront(Node *head, int value) {
-
+// insertFront() inserts a node at the front of a linked list.
+// arguments: head: the head of the linked list, value: the value of the new node.
+// returns: pointer to the head of the linked list.
+Node* insertFront(Node *head, int value) {
+    return insertNode(head, 0, value);
 }
 
-void deleteList(Node *head) {
+// insertBack() inserts a node at the back of a linked list.
+// arguments: head: the head of the linked list, value: the value of the new node.
+// returns: pointer to the head of the linked list.
+Node* insertBack(Node *head, int value) {
+    Node *current = head;
+
+    while (current->next) {
+        current = current->next;
+    }
+
+    Node* newnode = new Node;
+    newnode -> value = value;
+    current->next = newnode;
+
+    return head;
+}
+
+// deleteList() deletes a linked list.
+// arguments: head, the head of the linked list.
+// returns: nullptr if the list was deleted.
+Node* deleteList(Node *head) {
     Node *current = head;
     while (current) {
         head = current->next;
         delete current;
         current = head;
     }
+    return nullptr;
 }
