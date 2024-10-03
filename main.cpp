@@ -13,13 +13,11 @@ void output(Node *);
 
 void deleteNode(Node *, int);
 
+void insertNode(Node *, int, int);
+
 void addFront(Node *);
 
 void addTail(Node *);
-
-
-
-void insertNode(Node *);
 
 void deleteList(Node *);
 
@@ -47,51 +45,24 @@ int main() {
     output(head);
 
     // deleting a node
-    Node * current = head;
     cout << "Which node to delete? " << endl;
     output(head);
     int entry;
     cout << "Choice --> ";
     cin >> entry;
-
-    
-
+    deleteNode(head, entry);
     output(head);
 
     // insert a node
-    current = head;
     cout << "After which node to insert 10000? " << endl;
-    count = 1;
-    while (current) {
-        cout << "[" << count++ << "] " << current->value << endl;
-        current = current->next;
-    }
+    output(head);
     cout << "Choice --> ";
     cin >> entry;
-
-    current = head;
-    prev = head;
-    for (int i = 0; i < (entry); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
-    //at this point, insert a node between prev and current
-    Node * newnode = new Node;
-    newnode->value = 10000;
-    newnode->next = current;
-    prev->next = newnode;
+    insertNode(head, entry, 10000);
     output(head);
 
     // deleting the linked list
-    current = head;
-    while (current) {
-        head = current->next;
-        delete current;
-        current = head;
-    }
+    deleteList(head);
     head = nullptr;
     output(head);
 
@@ -112,7 +83,7 @@ void output(Node * hd) {
     cout << endl;
 }
 
-void deleteNode(Node * head, int index) {
+void deleteNode(Node *head, int index) {
     // traverse that many times and delete that node
     Node *current = head;
     Node *prev = head;
@@ -129,5 +100,32 @@ void deleteNode(Node * head, int index) {
         prev->next = current->next;
         delete current;
         current = nullptr;
+    }
+}
+
+void insertNode(Node *head, int index, int value) {
+    Node *current = head;
+    Node *prev = head;
+
+    for (int i = 0; i < (index); i++)
+        if (i == 0)
+            current = current->next;
+        else {
+            current = current->next;
+            prev = prev->next;
+        }
+    //at this point, insert a node between prev and current
+    Node * newnode = new Node;
+    newnode->value = value;
+    newnode->next = current;
+    prev->next = newnode;
+}
+
+void deleteList(Node *head) {
+    Node *current = head;
+    while (current) {
+        head = current->next;
+        delete current;
+        current = head;
     }
 }
